@@ -1,7 +1,8 @@
-package com.example.motivationapp.pages
+package com.example.motivationapp.ui
 
 import android.util.Log
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -41,8 +42,13 @@ fun TaskScreen(modifier: Modifier = Modifier) {
         )
         Button(
             onClick = {
-                selectedTask = taskList.random()
-                Log.d("MainPage", "Selection tapped - $selectedTask")
+                if(taskList.isNotEmpty()){
+                    selectedTask = taskList.random()
+                    Log.d("MainPage", "Selection tapped - $selectedTask")
+                }
+                else{
+                    selectedTask = "Add a task first"
+                }
             }
         ) {
             Text("Pick something to do")
@@ -77,7 +83,23 @@ fun TaskScreen(modifier: Modifier = Modifier) {
         Text(text = "Your tasks:")
 
         taskList.forEach { task ->
-            Text(text = task)
+            Row {
+                Text(text = task)
+                Button(
+                    onClick = {
+                        //Remove this task
+                        taskList.remove(task)
+
+                        if(selectedTask == task){
+                            selectedTask = ""
+                        }
+                    }
+                ) {
+                    Text(
+                        text = "Remove"
+                    )
+                }
+            }
         }
     }
 }

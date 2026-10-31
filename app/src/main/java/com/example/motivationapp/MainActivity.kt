@@ -10,7 +10,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.motivationapp.pages.TaskScreen
+import com.example.motivationapp.ui.TaskScreen
 import com.example.motivationapp.ui.theme.MotivationAppTheme
 
 class MainActivity : ComponentActivity() {
