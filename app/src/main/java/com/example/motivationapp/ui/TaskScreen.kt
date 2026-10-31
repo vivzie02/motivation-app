@@ -1,37 +1,33 @@
 package com.example.motivationapp.ui
 
-import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import com.example.motivationapp.viewmodel.TaskViewModel
 
 @Composable
-fun TaskScreen(modifier: Modifier = Modifier) {
-    var selectedTask by remember{
+fun TaskScreen(
+    modifier: Modifier = Modifier,
+    taskViewModel: TaskViewModel
+) {
+    var selectedTask by remember {
         mutableStateOf("Tap the button to get an idea")
     }
 
-    var newTask by remember{
+    var newTask by remember {
         mutableStateOf("")
     }
 
-    val taskList = remember {
-        mutableStateListOf(
-            "Read",
-            "Study",
-            "Play piano",
-            "Clean"
-        )
-    }
+    val taskList by taskViewModel.tasks.collectAsState()
 
     Column(modifier = modifier) {
         Text(
@@ -40,15 +36,10 @@ fun TaskScreen(modifier: Modifier = Modifier) {
         Text(
             text = "Choose something better to do with your time"
         )
+        //Get a random task from list
         Button(
             onClick = {
-                if(taskList.isNotEmpty()){
-                    selectedTask = taskList.random()
-                    Log.d("MainPage", "Selection tapped - $selectedTask")
-                }
-                else{
-                    selectedTask = "Add a task first"
-                }
+                selectedTask = taskList.randomOrNull()?.name ?: "Add some tasks first"
             }
         ) {
             Text("Pick something to do")
@@ -65,13 +56,11 @@ fun TaskScreen(modifier: Modifier = Modifier) {
             },
             label = {Text("Enter a task")}
         )
+        //Submit new task
         Button(
             onClick = {
-                if(newTask.isNotBlank() && !taskList.contains(newTask.trim())){
-                    taskList.add(newTask.trim())
-                    newTask = ""
-                }
-
+                taskViewModel.addTask(newTask)
+                newTask = ""
             }
         ){
             Text(
@@ -84,13 +73,12 @@ fun TaskScreen(modifier: Modifier = Modifier) {
 
         taskList.forEach { task ->
             Row {
-                Text(text = task)
+                Text(text = task.name)
                 Button(
                     onClick = {
                         //Remove this task
-                        taskList.remove(task)
-
-                        if(selectedTask == task){
+                        taskViewModel.removeTask(task)
+                        if(task.name == selectedTask){
                             selectedTask = ""
                         }
                     }
