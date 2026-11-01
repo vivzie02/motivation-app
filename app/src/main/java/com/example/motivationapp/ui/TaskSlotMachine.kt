@@ -186,7 +186,7 @@ fun TaskSlotMachine(
         verticalArrangement = Arrangement.spacedBy(24.dp)
     ) {
         Text(
-            text = "WHAT SHALL WE DO?",
+            text = "Your next task",
             fontSize = 14.sp,
             fontWeight = FontWeight.Bold,
             color = Color(0xFF9275B8)
@@ -300,7 +300,7 @@ fun TaskSlotMachine(
 
             selectedTask != null -> {
                 Text(
-                    text = "Your next adventure: $selectedTask",
+                    text = "Next up: $selectedTask",
                     color = Color(0xFF6035B0),
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold,
